@@ -4,10 +4,12 @@
         <p>Year: {{ carYear }} </p>
         <button @click="changeName">Обновить $emit</button>
         <button @click="changeFunc">Обновить FuncAsProps</button>
+        <button @click="updateCounter">Обновить Counter</button>
     </div>
 </template>
 
 <script>
+import { eventEmitter } from './main';
 export default {
     props: {
         carName: {
@@ -17,13 +19,17 @@ export default {
         carYear: Number,
         changeFunc: {
             type: Function,
-        }
+        },
+
     },
     methods: {
         changeName() {
             //передача данных из дочернего в родительский при помощи emit
             this.$emit('nameChanged', 'Zaz');
         },
+        updateCounter() {
+            eventEmitter.$emit('counterUpdated', 3);
+        }
     },
     computed: {
         reverseName() {
