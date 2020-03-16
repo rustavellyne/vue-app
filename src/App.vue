@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div id="app">
+       <h1>Parent: {{ carName }}</h1>
+       <app-car 
+            :carYear="carYear" 
+            :carName="carName"
+            @nameChanged="carName = $event"
+            :changeFunc="changeNameAudi"
+        ></app-car>
+    </div>
 </template>
-
+// :changeFunc="changeNameAudi" передача функции для изменения в родительском компоненте
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Car from './Car'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'App',
+        components: {
+            appCar: Car,
+        },
+        data() {
+            return {
+                carName: 'Mazda',
+                carYear: 2012,
+            }
+        }, 
+        methods: {
+            changeNameAudi() {
+                this.carName = 'Audi';
+            }
+        }
+    }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
