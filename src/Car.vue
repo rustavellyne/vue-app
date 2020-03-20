@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { eventEmitter } from './main';
+// import { eventEmitter } from './main';
 export default {
     props: {
         carName: {
@@ -28,7 +28,14 @@ export default {
             this.$emit('nameChanged', 'Zaz');
         },
         updateCounter() {
-            eventEmitter.$emit('counterUpdated', 3);
+            //проброс методов через гину событий
+            // eventEmitter.$emit('counterUpdated', 3);
+            // обращение к свойству state vuex
+            //this.$store.state.counter += 3;
+            // setter mutations
+            //this.$store.commit('setCounter', 2);
+            this.$store.dispatch('asyncIncrement', 2);
+            
         }
     },
     computed: {

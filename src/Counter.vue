@@ -5,17 +5,20 @@
 </template>
 
 <script>
-import {eventEmitter} from './main.js'
+// import {eventEmitter} from './main.js'
 export default {
-    data() {
-        return {
-            counter: 0,
+    computed: {
+        counter() {
+            // получение свойства state vuex
+            //return this.$store.state.counter;
+            return this.$store.getters.computedCounter;
         }
     },
     created() {
-        eventEmitter.$on('counterUpdated', (num) => {
-            this.counter += num;
-        });
+        //реакция события шины событий
+        // eventEmitter.$on('counterUpdated', (num) => {
+        //     this.counter += num;
+        // });
     },
 }
 </script>
