@@ -1,4 +1,4 @@
-# ad_project
+# vue-app
 
 ## Project setup
 ```
