@@ -1,6 +1,6 @@
 <template>
   <v-app>
-      <v-navigation-drawer temporary app v-model="drawer">
+      <v-navigation-drawer temporary app v-model="drawer" >
         <v-list >
           <v-list-item :to="link.url" v-for="link of links" :key="link.title">
             <v-list-item-icon>
@@ -19,12 +19,14 @@
         flat
         tile
       >
-        <v-app-bar dark app flat color="primary">
+        <v-app-bar dark app color="primary">
           <v-app-bar-nav-icon 
             @click="drawer = !drawer" 
             class="hidden-md-and-up"
           ></v-app-bar-nav-icon>
-          <v-toolbar-title>Ad application</v-toolbar-title>
+          <v-toolbar-title>
+            <router-link to="/" tag="span" class="pointer">Ad application</router-link>
+          </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items class="hidden-sm-and-down">
             
@@ -58,3 +60,9 @@ export default {
   },
 } 
 </script>
+
+<style scoped>
+  .pointer {
+    cursor: pointer;
+  }
+</style>
