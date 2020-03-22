@@ -9,12 +9,12 @@
             show-arrows-on-hover
             >
             <v-carousel-item
-              v-for="ad in ads"
+              v-for="ad in promoAds"
               :key ="ad.id"
               :src="ad.img"
             >
               <div class="car-link">
-                <v-btn class="error" :to="'/ad' + ad.id">{{ ad.title }}</v-btn>
+                <v-btn class="error" :to="'ad/' + ad.id">{{ ad.title }}</v-btn>
               </div>
             </v-carousel-item>
           </v-carousel>
@@ -45,7 +45,7 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn depressed :to="'/ad' + ad.id">
+              <v-btn depressed :to="'ad/' + ad.id">
                 Open
               </v-btn>
 
@@ -64,38 +64,17 @@
 export default {
   data () {
     return {
-      ads: [
-        { 
-          title: 'First Ad', 
-          description: 'some new add', 
-          promo: true, 
-          img: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg', 
-          id: '123'
-        },
-        { 
-          title: 'Second Ad', 
-          description: 'some new add', 
-          promo: true, 
-          img: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg', 
-          id: '124'
-        },
-        { 
-          title: 'Third Ad', 
-          description: 'some new add', 
-          promo: true, 
-          img: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg', 
-          id: '125'
-        },
-        { 
-          title: 'Four Ad', 
-          description: 'some new add', 
-          promo: true, 
-          img: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg', 
-          id: '126'
-        }
-      ],
+      
     }
   },
+  computed: {
+    promoAds () {
+      return this.$store.getters.promoAds
+    },
+    ads () {
+      return this.$store.getters.ads
+    }
+  }
 }
 </script>
 

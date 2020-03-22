@@ -29,7 +29,7 @@
             >
               <v-text-field
                 validate-on-blur
-                label="email"
+                label="Email"
                 name="email"
                 :rules="emailRules"
                 v-model="email"

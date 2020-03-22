@@ -69,6 +69,7 @@ export default {
       title: '',
       description: '',
       promo: false,
+      image: 'https://www.nasa.gov/sites/default/files/thumbnails/image/edu_what_is_earth_0.jpg'
     }
   },
   methods: {
@@ -78,7 +79,9 @@ export default {
         title: this.title,
         description: this.description,
         promo: this.promo,
+        img: this.image
       };
+      this.$store.dispatch('createAd', ad);
       console.log(ad);
     }
   },

@@ -6,11 +6,11 @@
           <v-img
             class="white--text align-end"
             height="300px"
-            src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
+            :src="ad.img"
           ></v-img>
           <v-card-text>
-            <h1 class="text--primary">Lorem</h1>
-            <p class="text--primary">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ab nobis aliquid nam minus, consectetur pariatur eaque quibusdam sequi magni eius accusamus nemo laudantium quasi? Fuga voluptates ab quae fugit.</p>
+            <h1 class="text--primary">{{ad.title}}</h1>
+            <p class="text--primary">{{ad.description}}</p>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -25,10 +25,12 @@
 
 <script>
 export default {
-  data () {
-    return {
-
-    }
-  },
+  props: ['id'],
+  computed: {
+    ad () {
+      const id = this.id;
+      return this.$store.getters.adById(id)
+    },
+  }
 }
 </script>
