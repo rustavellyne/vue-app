@@ -65,7 +65,12 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="primary" :disabled="!valid" @click="onSubmit">Login</v-btn>
+            <v-btn 
+              color="primary" 
+              :disabled="!valid || loading" 
+              :loading="loading"
+              @click="onSubmit"
+            >Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -105,8 +110,19 @@ export default {
           email: this.email,
           password: this.password,
         }
-        console.log(user);
+        this.$store.dispatch('registerUser', user)
+            .then(() => {
+              this.$router.push('/')
+            })
+            .catch(error => {
+              console.log(error)
+            })
       },
+    },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      }
     },
 }
 </script>
