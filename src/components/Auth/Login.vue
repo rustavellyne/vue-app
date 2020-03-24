@@ -25,6 +25,7 @@
             <v-form
               ref="form"
               v-model="valid"
+              validation
               lazy-validation
             >
               <v-text-field
@@ -39,13 +40,13 @@
               />
 
               <v-text-field
-              validate-on-blur
+                validate-on-blur
+                prepend-icon="mdi-lock"
                 label="Password"
                 name="password"
-                :rules="passwordRules"
+                :counter="true"
                 v-model="password"
-                :counter="6"
-                prepend-icon="mdi-lock"
+                :rules="passwordRules"
                 type="password"
                 required
               />
@@ -53,7 +54,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="primary" :disabled="!valid" @click="onSubmit">Login</v-btn>
+            <v-btn color="primary" :loading="loading" :disabled="!valid || loading" @click="onSubmit">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -79,17 +80,23 @@ export default {
     }
   },
   methods: {
-      validate () {
-        
-      },
       onSubmit() {
         if (!(this.$refs.form.validate())) return false;
         let user = {
           email: this.email,
           password: this.password,
         }
-        console.log(user);
+        this.$store.dispatch('loginUser', user)
+            .then(() => {
+              this.$router.push('/')
+            })
+            .catch(() => {})
       },
+    },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      }
     },
 }
 </script>

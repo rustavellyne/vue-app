@@ -27,6 +27,20 @@ export default {
                 commit('setLoading', false);
                 throw error
             }
+            commit('setLoading', false);
+        },
+        async loginUser ({commit}, {email, password}) {
+            commit('clearError');
+            commit('setLoading', true);
+            try {
+                const user = await fb.auth().signInWithEmailAndPassword(email, password)
+                commit('setUser', new User(user.id))
+            } catch (error) {
+                commit('setError', error.message);
+                commit('setLoading', false);
+                throw error
+            }
+            commit('setLoading', false);
         }
     },
     getters: {
