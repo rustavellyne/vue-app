@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import guard from './guard'
 import Home from '@/components/Home'
 import Ad from '@/components/Ads/Ad'
 import AdList from '@/components/Ads/AdList'
@@ -22,16 +23,19 @@ export default new VueRouter({
             name: 'ad',
             props: true,
             component: Ad,
+            beforeEnter: guard
         },
         {
             path: '/list',
             name: 'adlist',
             component: AdList,
+            beforeEnter: guard
         },
         {
             path: '/new',
             name: 'newad',
             component: NewAd,
+            beforeEnter: guard
         },
         {
             path: '/login',
@@ -47,6 +51,7 @@ export default new VueRouter({
             path: '/orders',
             name: 'orders',
             component: Orders,
+            beforeEnter: guard
         },
     ],
     // withou hash

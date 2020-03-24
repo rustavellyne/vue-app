@@ -99,5 +99,10 @@ export default {
         return this.$store.getters.loading
       }
     },
+    created () {
+      if(this.$route.query['loginError']) {
+        this.$store.dispatch('setError', 'Login please to access content')
+      }
+    }
 }
 </script>
