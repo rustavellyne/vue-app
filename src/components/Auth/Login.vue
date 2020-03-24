@@ -25,6 +25,7 @@
             <v-form
               ref="form"
               v-model="valid"
+              @keyup.native.enter="valid && onSubmit($event)"
               validation
               lazy-validation
             >
@@ -54,7 +55,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="primary" :loading="loading" :disabled="!valid || loading" @click="onSubmit">Login</v-btn>
+            <v-btn color="primary" :loading="loading" :disabled="!valid || loading" @click="onSubmit" >Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

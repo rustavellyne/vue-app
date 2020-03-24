@@ -41,11 +41,22 @@ export default {
                 throw error
             }
             commit('setLoading', false);
-        }
+        },
+        autoLoginUser ({commit}, payload) {
+            commit('setUser', new User(payload.uid))
+        },
+        logout ({commit}) {
+            fb.auth().signOut();
+            commit('setUser', null)
+        },
+       
     },
     getters: {
         user (state) {
             return state.user
-        }
+        },
+        isLoggedIn (state) {
+            return state.user != null
+        },
     },
 }

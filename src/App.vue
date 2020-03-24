@@ -12,6 +12,16 @@
             </v-list-item-content>
   
           </v-list-item>
+          <v-list-item @click="logout" v-if="isUserLoggedIn">
+            <v-list-item-icon>
+              <v-icon>mdi-exit-to-app</v-icon>
+            </v-list-item-icon>
+  
+            <v-list-item-content>
+              <v-list-item-title v-text="'Logout'"></v-list-item-title>
+            </v-list-item-content>
+  
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-card
@@ -33,6 +43,10 @@
             <v-btn text small v-for="link of links" :key="link.title" :to="link.url">
               <v-icon left dark>{{ link.icon }}</v-icon>
               {{ link.title }}
+            </v-btn>
+            <v-btn text small @click="logout" v-if="isUserLoggedIn">
+              <v-icon left dark>mdi-exit-to-app</v-icon>
+              logout
             </v-btn>
           </v-toolbar-items>
         </v-app-bar>
@@ -69,23 +83,35 @@ export default {
   data () {
     return {
       drawer: false,
-      links: [
-        { title: 'Login', icon: 'mdi-lock', url: '/login' },
-        { title: 'Registration', icon: 'mdi-face', url: '/registration' },
-        { title: 'Orders', icon: 'mdi-bookmark', url: '/orders' },
-        { title: 'New Ad', icon: 'mdi-plus', url: '/new' },
-        { title: 'My Ad', icon: 'mdi-format-list-bulleted', url: '/list' },
-      ],
     }
   },
   methods: {
     closeError () {
       this.$store.dispatch('clearError')
     },
+    logout () {
+      this.$store.dispatch('logout')
+    }
   },
   computed: {
     error () {
       return this.$store.getters.error;
+    },
+    isUserLoggedIn () {
+      return this.$store.getters.isLoggedIn
+    },
+    links () {
+      if(this.isUserLoggedIn) {
+        return [
+          { title: 'Orders', icon: 'mdi-bookmark', url: '/orders' },
+          { title: 'New Ad', icon: 'mdi-plus', url: '/new' },
+          { title: 'My Ad', icon: 'mdi-format-list-bulleted', url: '/list' },
+        ]
+      }
+      return [
+          { title: 'Login', icon: 'mdi-lock', url: '/login' },
+          { title: 'Registration', icon: 'mdi-face', url: '/registration' },
+        ]
     },
   },
 } 
