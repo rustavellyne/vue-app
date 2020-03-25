@@ -97,12 +97,19 @@ export default {
     computed: {
       loading () {
         return this.$store.getters.loading
-      }
+      },
+      isUserLoggedIn () {
+      return this.$store.getters.isLoggedIn
+    },
     },
     created () {
+      if(this.isUserLoggedIn) {
+        this.$router.push('/')
+      }
       if(this.$route.query['loginError']) {
         this.$store.dispatch('setError', 'Login please to access content')
       }
+      
     }
 }
 </script>
