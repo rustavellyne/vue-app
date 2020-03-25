@@ -1,3 +1,15 @@
+import * as fb from 'firebase'
+
+class Ad {
+    constructor(userId, title, img,  description = '', promo = false) {
+        this.userId = userId
+        this.title = title
+        this.description = description
+        this.img = img
+        this.promo = promo
+    }
+}
+
 export default {
     state: {
         ads: [
@@ -37,15 +49,33 @@ export default {
         },
     },
     actions: {
-        createAd ({commit}, payload) {
-            payload.id = '1'
-            commit('createAd', payload)
+        async createAd ({commit, getters}, payload) {
+            let userId = getters.user.id;
+            console.log(getters.user.id);
+            try {
+                commit('clearError');
+                commit('setLoading', true);
+                
+                const newAd = new Ad(userId, payload.title, payload.img, payload.description, payload.promo)
+                console.log(newAd)
+                await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').push(newAd)
+
+                commit('createAd', newAd)
+            } catch (error) {
+                commit('setError', error.message);
+                commit('setLoading', false);
+                console.log(error)
+                throw error
+            }
+            commit('setLoading', false);
+            
         },
     },
     getters: {
         ads (state) {
             return state.ads
         },
+        
         promoAds (state) {
             return state.ads.filter(ad => ad.promo === true)
         },

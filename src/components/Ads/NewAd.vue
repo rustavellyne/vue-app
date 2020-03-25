@@ -52,7 +52,7 @@
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs3 align-self-center>
-            <v-btn color="success" :disabled="!valid" @click="createAd">Create Ad</v-btn>
+            <v-btn color="success" :disabled="!valid" @click="createAd" :loading="loading">Create Ad</v-btn>
           </v-flex>
         </v-layout>
         
@@ -81,9 +81,17 @@ export default {
         promo: this.promo,
         img: this.image
       };
-      this.$store.dispatch('createAd', ad);
-      console.log(ad);
+      this.$store.dispatch('createAd', ad)
+          .then(() => {
+              this.$router.push('/list')
+            })
+          .catch((error) => {console.log(error)})
     }
   },
+  computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
+  }
 }
 </script>

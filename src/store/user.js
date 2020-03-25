@@ -16,12 +16,13 @@ export default {
         } 
     },
     actions: {
+        
         async registerUser ({commit}, {email, password}) {
             commit('clearError');
             commit('setLoading', true);
             try {
                 const user = await fb.auth().createUserWithEmailAndPassword(email, password)
-                commit('setUser', new User(user.id))
+                commit('setUser', new User(user.uid))
             } catch (error) {
                 commit('setError', error.message);
                 commit('setLoading', false);
@@ -29,12 +30,14 @@ export default {
             }
             commit('setLoading', false);
         },
+
         async loginUser ({commit}, {email, password}) {
             commit('clearError');
             commit('setLoading', true);
             try {
                 const user = await fb.auth().signInWithEmailAndPassword(email, password)
-                commit('setUser', new User(user.id))
+                console.log(user.uid)
+                commit('setUser', new User(user.uid))
             } catch (error) {
                 commit('setError', error.message);
                 commit('setLoading', false);
@@ -42,9 +45,12 @@ export default {
             }
             commit('setLoading', false);
         },
+
         autoLoginUser ({commit}, payload) {
+            console.log('autologin', payload.uid)
             commit('setUser', new User(payload.uid))
         },
+
         logout ({commit}) {
             fb.auth().signOut();
             commit('setUser', null)
