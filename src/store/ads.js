@@ -12,55 +12,38 @@ class Ad {
 
 export default {
     state: {
-        ads: [
-            { 
-              title: 'First Ad', 
-              description: 'some new add', 
-              promo: true, 
-              img: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg', 
-              id: '123'
-            },
-            { 
-              title: 'Second Ad', 
-              description: 'some new add', 
-              promo: false, 
-              img: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg', 
-              id: '124'
-            },
-            { 
-              title: 'Third Ad', 
-              description: 'some new add', 
-              promo: false, 
-              img: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg', 
-              id: '125'
-            },
-            { 
-              title: 'Four Ad', 
-              description: 'some new add', 
-              promo: true, 
-              img: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg', 
-              id: '126'
-            }
-        ],
+        ads: [],
     },
     mutations: {
         createAd (state, payload) {
             state.ads.push(payload)
         },
+        loadAds (state, payload) {
+            state.ads = payload
+        },
+        
     },
     actions: {
         async createAd ({commit, getters}, payload) {
             let userId = getters.user.id;
-            console.log(getters.user.id);
             try {
                 commit('clearError');
                 commit('setLoading', true);
+                const image = payload.img;
+                const imageExt = image.name.slice(image.name.lastIndexOf('.'))
                 
-                const newAd = new Ad(userId, payload.title, payload.img, payload.description, payload.promo)
-                console.log(newAd)
-                await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').push(newAd)
-
-                commit('createAd', newAd)
+                const newAd = new Ad(userId, payload.title, '', payload.description, payload.promo)
+                let ad = await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').push(newAd)
+                const fileData = await fb.storage().ref(`ads/${ad.getKey()}.${imageExt}`).put(image)
+                const imageSrc = await fileData.ref.getDownloadURL()
+                console.log(imageSrc)
+               
+                await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').child(ad.getKey()).update({img: imageSrc})
+                commit('createAd', {
+                    ...newAd,
+                    id: ad.getKey(),
+                    img: imageSrc, 
+                })
             } catch (error) {
                 commit('setError', error.message);
                 commit('setLoading', false);
@@ -69,6 +52,35 @@ export default {
             }
             commit('setLoading', false);
             
+        },
+        async fetchAds({commit}) {
+            try {
+                commit('clearError');
+                commit('setLoading', true);
+
+                let fbVal = await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').once('value')
+                const ads = fbVal.val()
+
+                let newAds = []
+                if(ads) {
+                    Object.keys(ads).forEach(key=>{
+                        const ad = ads[key]
+                        ad.id = key
+                        newAds.push(ad)
+                    })
+                    commit('loadAds', newAds)
+                }
+                
+                
+                
+
+            } catch (error) {
+                commit('setError', error.message);
+                commit('setLoading', false);
+                console.log(error)
+                throw error
+            }
+            commit('setLoading', false);
         },
     },
     getters: {

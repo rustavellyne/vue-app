@@ -114,7 +114,7 @@ export default {
             .then(() => {
               this.$router.push('/')
             })
-            .catch(() => {})
+            .catch((error) => {console.log(error)})
       },
     },
     computed: {

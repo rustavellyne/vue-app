@@ -8,18 +8,26 @@ import config from './api_keys'
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App),
-  created () {
-    // Your web app's Firebase configuration
-    fb.initializeApp(config)
-    fb.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.$store.dispatch('autoLoginUser', user)
-      }
-    })
-  },
-}).$mount('#app')
+let app = null;
+
+fb.initializeApp(config)
+
+fb.auth().onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch('autoLoginUser', user)
+  }
+
+  if(!app) {
+    app = new Vue({
+      router,
+      store,
+      vuetify,
+      render: h => h(App),
+      created () {
+        this.$store.dispatch('fetchAds')
+      },
+    }).$mount('#app')
+  }
+})
+
+

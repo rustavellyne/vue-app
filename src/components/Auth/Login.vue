@@ -91,7 +91,7 @@ export default {
             .then(() => {
               this.$router.push('/')
             })
-            .catch(() => {})
+            .catch((error) => {console.log(error)})
       },
     },
     computed: {
@@ -103,9 +103,7 @@ export default {
     },
     },
     created () {
-      if(this.isUserLoggedIn) {
-        this.$router.push('/')
-      }
+      
       if(this.$route.query['loginError']) {
         this.$store.dispatch('setError', 'Login please to access content')
       }

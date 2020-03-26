@@ -34,13 +34,15 @@
             <v-btn
               color="blue-grey"
               class="ma-2 white--text"
+              @click="triggerUpload"
             >
               Upload
               <v-icon right dark>mdi-cloud-upload</v-icon>
             </v-btn>
+            <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange">
           </v-flex>
           <v-flex xs12 class="pa-2">
-            <v-img src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg" height="150"></v-img>
+            <v-img :src="imageSrc" height="150" v-if="imageSrc"></v-img>
           </v-flex>
         </v-layout>
         <v-layout row class="ma-1">
@@ -52,7 +54,7 @@
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs3 align-self-center>
-            <v-btn color="success" :disabled="!valid" @click="createAd" :loading="loading">Create Ad</v-btn>
+            <v-btn color="success" :disabled="!valid || !image" @click="createAd" :loading="loading">Create Ad</v-btn>
           </v-flex>
         </v-layout>
         
@@ -69,12 +71,13 @@ export default {
       title: '',
       description: '',
       promo: false,
-      image: 'https://www.nasa.gov/sites/default/files/thumbnails/image/edu_what_is_earth_0.jpg'
+      image: null,
+      imageSrc: '',
     }
   },
   methods: {
     createAd () {
-      if(!(this.$refs.form.validate()) ) return false;
+      if(!(this.$refs.form.validate()) || !this.image) return false;
       let ad = {
         title: this.title,
         description: this.description,
@@ -86,7 +89,20 @@ export default {
               this.$router.push('/list')
             })
           .catch((error) => {console.log(error)})
-    }
+    },
+    triggerUpload () {
+      this.$refs.fileInput.click()
+    },
+    onFileChange (event) {
+      const file = event.target.files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        this.imageSrc = reader.result
+      };
+      
+      this.image = file
+    },
   },
   computed: {
     loading () {

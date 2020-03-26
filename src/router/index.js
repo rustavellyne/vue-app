@@ -23,7 +23,6 @@ export default new VueRouter({
             name: 'ad',
             props: true,
             component: Ad,
-            beforeEnter: Guard
         },
         {
             path: '/list',
@@ -54,6 +53,6 @@ export default new VueRouter({
             beforeEnter: Guard
         },
     ],
-    // withou hash
+    // without hash
     mode: 'history',
 });

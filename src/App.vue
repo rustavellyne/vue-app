@@ -91,6 +91,7 @@ export default {
     },
     logout () {
       this.$store.dispatch('logout')
+      this.$router.push('/').catch((error) => {console.log(error)})
     }
   },
   computed: {
