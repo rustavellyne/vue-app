@@ -49,9 +49,7 @@
                 Open
               </v-btn>
 
-              <v-btn raised color="primary" depressed>
-                Buy
-              </v-btn>
+              <app-buy-modal :ad="ad"></app-buy-modal>
             </v-card-actions>
           </v-card>
         </v-flex>
