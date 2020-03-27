@@ -19,7 +19,7 @@
             dark
             flat
           >
-            <v-toolbar-title>Login form</v-toolbar-title>
+            <v-toolbar-title>Register form</v-toolbar-title>
             </v-toolbar>
           <v-card-text>
             <v-form
@@ -70,7 +70,7 @@
               :disabled="!valid || loading" 
               :loading="loading"
               @click="onSubmit"
-            >Login</v-btn>
+            >Register</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

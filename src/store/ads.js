@@ -21,6 +21,13 @@ export default {
         loadAds (state, payload) {
             state.ads = payload
         },
+        updateAd (state, {id, title, description}) {
+            const findAd = state.ads.find(ad => {
+                return ad.id === id
+            })
+            findAd.title = title
+            findAd.description = description
+        },
         
     },
     actions: {
@@ -77,23 +84,17 @@ export default {
             }
             commit('setLoading', false);
         },
-        async updateAd ({commit}, payload) {
+        async updateAd ({commit}, {id, title, description}) {
             try {
                 commit('clearError');
                 commit('setLoading', true);
 
-                let fbVal = await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').once('value')
-                const ads = fbVal.val()
-
-                let newAds = []
-                if(ads) {
-                    Object.keys(ads).forEach(key=>{
-                        const ad = ads[key]
-                        ad.id = key
-                        newAds.push(ad)
-                    })
-                    commit('loadAds', newAds)
-                }
+                await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').child(id).update({
+                    title, description
+                })
+               
+                commit('updateAd', {id, title, description})
+                
             } catch (error) {
                 commit('setError', error.message);
                 commit('setLoading', false);
@@ -111,8 +112,10 @@ export default {
         promoAds (state) {
             return state.ads.filter(ad => ad.promo === true)
         },
-        myAds (state) {
-            return state.ads
+        myAds (state, getters) {
+            return state.ads.filter(ad => {
+                return ad.userId == getters.user.id
+              })
         },
         adById (state) {
             return adId => state.ads.find(ad => ad.id === adId)
