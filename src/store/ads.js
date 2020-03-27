@@ -36,9 +36,8 @@ export default {
                 let ad = await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').push(newAd)
                 const fileData = await fb.storage().ref(`ads/${ad.getKey()}.${imageExt}`).put(image)
                 const imageSrc = await fileData.ref.getDownloadURL()
-                console.log(imageSrc)
-               
                 await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').child(ad.getKey()).update({img: imageSrc})
+                
                 commit('createAd', {
                     ...newAd,
                     id: ad.getKey(),
@@ -70,10 +69,31 @@ export default {
                     })
                     commit('loadAds', newAds)
                 }
-                
-                
-                
+            } catch (error) {
+                commit('setError', error.message);
+                commit('setLoading', false);
+                console.log(error)
+                throw error
+            }
+            commit('setLoading', false);
+        },
+        async updateAd ({commit}, payload) {
+            try {
+                commit('clearError');
+                commit('setLoading', true);
 
+                let fbVal = await fb.database().ref('vue-ads-app/ads/gU2saGYqwnQiGM1yJ1qg').once('value')
+                const ads = fbVal.val()
+
+                let newAds = []
+                if(ads) {
+                    Object.keys(ads).forEach(key=>{
+                        const ad = ads[key]
+                        ad.id = key
+                        newAds.push(ad)
+                    })
+                    commit('loadAds', newAds)
+                }
             } catch (error) {
                 commit('setError', error.message);
                 commit('setLoading', false);
